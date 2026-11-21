@@ -1,6 +1,6 @@
 from random import Random
 
-from qcf import Gate, Register, aes_add_round_key, estimate_resources
+from qcf import Gate, Register, aes_add_round_key, aes_xtime, estimate_resources
 
 
 def test_add_round_key_structure():
@@ -30,3 +30,16 @@ def test_full_width_random_inputs():
         output = circuit.evaluate_basis(value)
         assert output == key << 128 | (state ^ key)
         assert inverse.evaluate_basis(output) == value
+
+
+def test_xtime_against_polynomial_remainder():
+    circuit = aes_xtime()
+    assert circuit.registers == (Register("data", 8),)
+    inverse = circuit.inverse()
+    for byte in range(256):
+        product = byte << 1
+        if product.bit_length() == 9:
+            product ^= 0x11B
+        assert circuit.evaluate_basis(byte) == product
+        assert inverse.evaluate_basis(product) == byte
+    assert estimate_resources(circuit).gate_counts == {"cx": 24}

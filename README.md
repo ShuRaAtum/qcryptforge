@@ -58,7 +58,7 @@ assert Statevector.from_label("10").evolve(qc).probabilities_dict() == {"11": 1.
 | Analysis | Allocated qubits, per-gate counts, total gates, logical depth |
 | Backends | Qiskit 2.x export. The core evaluator works without an SDK. |
 
-Register layout, AES byte order and depth assumptions are specified in the [circuit conventions](docs/circuits.md). Finite-field arithmetic and SubBytes are the next steps toward AES-128. The [roadmap](docs/ROADMAP.md) covers further algorithms and backends.
+The first follow-up component, `aes_xtime()`, multiplies one byte by x in the AES field in place. For the FIPS 197 example, `aes_xtime().evaluate_basis(0x57)` returns `0xae`. Register layout, AES byte order and depth assumptions are specified in the [circuit conventions](docs/circuits.md). The [roadmap](docs/ROADMAP.md) covers SubBytes and further components.
 
 ## Development
 

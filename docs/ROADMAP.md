@@ -6,9 +6,13 @@
 - Register XOR, bit permutations, AES AddRoundKey and logical resource counting.
 - Optional Qiskit export and small-circuit statevector verification.
 
+## Implemented after the initial alpha milestone
+
+- In-place AES multiplication by x (`aes_xtime`), checked against polynomial reduction on all 256 byte values, including inverse round trips.
+
 ## Planned AES-128 milestones
 
-1. Implement byte operations in the AES field modulo x⁸ + x⁴ + x³ + x + 1. Start with multiplication by x and check all 256 inputs and inverse round trips.
+1. Extend single-byte arithmetic with the operations needed by the selected S-box design.
 2. Select a reversible S-box design, document the workspace contract, and validate all 256 outputs and cleanup.
 3. Add ShiftRows and MixColumns with reference checks for byte order and linear maps.
 4. Build and validate key expansion, compose rounds, and compare complete encryption against published vectors. Verify restoration of workspace.

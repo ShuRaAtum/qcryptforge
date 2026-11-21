@@ -14,6 +14,10 @@ Gate names are lowercase. `Gate("cx", (control, target))` flips its target if th
 
 Wire `8*j + b` contains bit b of serialized state byte j. In FIPS 197 notation, j = 4 × column + row. The key uses the same mapping starting at wire 128. For the standard's hex strings, use `int.from_bytes(bytes.fromhex(hex_string), "little")`. AddRoundKey XORs corresponding bytes in place, preserves the supplied round key and is self-inverse. Tests compare the initial key addition against a published intermediate state. [FIPS 197, §5.1.4](https://csrc.nist.gov/pubs/fips/197/final) and [NIST AES-128 example, page 1](https://csrc.nist.gov/CSRC/media/Projects/Cryptographic-Standards-and-Guidelines/documents/examples/AES_Core128.pdf).
 
+## AES multiplication by x
+
+`aes_xtime()` maps an eight-qubit `data` register holding a field element a to x·a modulo x⁸ + x⁴ + x³ + x + 1. Wire i holds the coefficient of xⁱ. A cyclic left rotation moves the old high bit to wire zero. Three CX gates from that wire supply the remaining reduction terms at wires 1, 3 and 4. The implementation emits 24 CX gates with explicit swaps and uses no workspace. Its inverse multiplies by the field inverse of x. [FIPS 197, §4.2.1](https://csrc.nist.gov/pubs/fips/197/final).
+
 ## Resource measurement
 
 `estimate_resources` counts each emitted X, CX or CCX once before transpilation. Width includes idle allocated wires. Each wire starts at layer zero. A gate occupies the layer after the maximum last-used layer of its operands, and all of those wires become busy at that layer. Depth is the last occupied layer. This assumes unit gate duration, all-to-all connectivity, and concurrency on disjoint wires.
