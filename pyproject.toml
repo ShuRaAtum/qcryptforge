@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=77,<83"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qcryptforge"
+version = "0.1.0a0"
+description = "Reversible quantum circuits for cryptographic components"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+classifiers = ["Development Status :: 3 - Alpha", "Topic :: Scientific/Engineering"]
+
+[project.optional-dependencies]
+qiskit = ["qiskit>=2,<3"]
+test = ["pytest>=8,<10"]
+
+[project.urls]
+Repository = "https://github.com/ShuRaAtum/qcryptforge"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
