@@ -1,0 +1,31 @@
+name: CI
+on: [push, pull_request]
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v7.1.0
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install and verify the core distribution
+        run: |
+          python -m pip install '.[test]'
+          python -m pip check
+          python -c "import importlib.util, qcf; assert importlib.util.find_spec('qiskit') is None"
+          python -m pytest -q --ignore=tests/test_qiskit.py
+          python examples/add_round_key.py
+      - name: Install Qiskit and verify all tests and README examples
+        run: |
+          python -m pip install '.[test,qiskit]'
+          python -m pip check
+          python -c "import qiskit; print(qiskit.__version__)"
+          python -m pytest -q
+          python -m pip freeze
