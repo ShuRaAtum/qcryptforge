@@ -1,6 +1,6 @@
 import pytest
 
-from qcf import Circuit, Gate, Register, aes_add_round_key, estimate_resources, register_xor
+from qcf import Circuit, Gate, Register, aes_add_round_key, aes_xtime, estimate_resources, register_xor
 from qcf.backends.qiskit import to_qiskit
 
 pytest.importorskip("qiskit")
@@ -10,6 +10,7 @@ from qiskit.quantum_info import Operator, Statevector
 
 @pytest.mark.parametrize("circuit", [
     register_xor(2),
+    aes_xtime(),
     Circuit((Register("data", 3),), (Gate("x", (2,)), Gate("ccx", (2, 0, 1)), Gate("cx", (1, 0)))),
 ])
 def test_operator_matches_basis_permutation(circuit):
